@@ -1,0 +1,109 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
+      <form (ngSubmit)="onSubmit()" #form="ngForm">
+        <div id="user-data" ngModelGroup="userData" #ngData="ngModelGroup">
+          <!-- ngModel пожно использовать в трех формах
+            1. no binding (без привязки) - только для того что б сказать ангуляру что данные елемент это часть формы
+            2. one-way binding (одностороння привязка) чтоб сказать что данный элемент имеет ссылку
+             и при помощи ее можно получать состояние эелемента и валидировать его а также задавать дефолтное значение
+            3. two-way-binding (двустороння привязка) это когда по событию меняется переменная и значение этой переменной перерисовывается в шаблоне HTML -->
+          <div class="form-group">
+            <label for="username">UserName</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              class="form-control"
+              ngModel
+              required
+              #usernameRef="ngModel"
+            />
+            <span
+              *ngIf="!usernameRef.valid && usernameRef.touched"
+              class="help-block"
+              >Please enter a user name!</span
+            >
+          </div>
+          <button
+            (click)="suggestUserName()"
+            class="btn btn-default"
+            type="button"
+          >
+            Suggest and Username
+          </button>
+          <div class="form-group">
+            <label for="Email">Mail</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-control"
+              ngModel
+              required
+              email
+              #emailRef="ngModel"
+            />
+            <span *ngIf="!emailRef.valid && emailRef.touched" class="help-block"
+              >Please enter a valid email!</span
+            >
+          </div>
+        </div>
+        <p *ngIf="!ngData.valid">User data is invalid</p>
+        <div class="form-group">
+          <label for="secret">Secret questions</label>
+          <select
+            name="secretQuestion"
+            id="secret"
+            class="form-control"
+            [ngModel]="defaultQuestion"
+            required
+            #secretRef="ngModel"
+          >
+            <option value="pet">Your first pet?</option>
+            <option value="teacher">Your first teacher?</option>
+          </select>
+          <span *ngIf="!secretRef.valid && secretRef.touched" class="help-block"
+            >Please enter a secred word!</span
+          >
+        </div>
+        <div class="form-group">
+          <textarea
+            name="questionAnswer"
+            id="questionAnswer"
+            class="form-control"
+            rows="3"
+            [(ngModel)]="answer"
+          ></textarea>
+        </div>
+        <p>Your reply: {{ answer }}</p>
+        <div class="radio" *ngFor="let gender of genders">
+          <label>
+            <input
+              type="radio"
+              name="gender"
+              ngModel
+              [value]="gender"
+              required
+            />
+            {{ gender }}
+          </label>
+        </div>
+        <button [disabled]="!form.valid" class="btn btn-primary" type="submit">
+          Submit
+        </button>
+      </form>
+    </div>
+  </div>
+  <hr />
+  <div class="row" *ngIf="formSubmitted">
+    <div class="col-xs-12">
+      <h3>Your data</h3>
+      <p>Username: {{ user.username }}</p>
+      <p>Mail: {{ user.email }}</p>
+      <p>Secret question: {{ user.secretQuestion }}</p>
+      <p>Answer: {{ user.answer }}</p>
+      <p>Gender: {{ user.gender }}</p>
+    </div>
+  </div>
+</div>

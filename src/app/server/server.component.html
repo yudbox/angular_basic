@@ -1,0 +1,53 @@
+<!-- двустороняя привязка одновременно запускает фунцию замены переменой и меняет атрибут value у селемента -->
+<!-- чтоб метод ngModel сработал для этого в AppModule нужно подключить FormsModule из Ангуляр -->
+
+<div class="container">
+  <h2>Server component</h2>
+
+  <!-- вызывает event serverCreated изнутри компоненты с помощью дикоратора @Output и запускает метод родительской компоненты onCreateServer -->
+  <app-cockpit (serverCreated)="onCreateServer($event)"></app-cockpit>
+  <!-- [srvElement] прокидывание типа пропсов внутрь компоненты которые принимаются керез дикоратор @Input -->
+  <hr />
+  <h3>Server names</h3>
+
+  <app-server-element
+    *ngFor="let serverElement of servers"
+    [srvElement]="serverElement"
+  ></app-server-element>
+
+  <!-- 
+    *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  *
+  * -->
+  <!-- инпут без двусторонней связи -->
+  <!-- <input type="text" class="form-control" (input)="onUpdateServerName($event)" /> -->
+
+  <p>Server id = {{ serverId }} and status = {{ serverStatus }}</p>
+  <!-- атрибутные директивы добавляют инлайновый стиль
+     или класс 'online' если выполнится условие  serverCreated === true -->
+  <p
+    [ngStyle]="{ backgroundColor: getColor() }"
+    [ngClass]="{ online: serverCreated }"
+  >
+    {{ serverCreationStatus }}
+  </p>
+</div>
+<ng-template #noServer>
+  <p>No server</p>
+</ng-template>

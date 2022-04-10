@@ -1,0 +1,20 @@
+<div class="row">
+  <div class="col-xs-12">
+    <label> Server name</label>
+    <!-- <input type="text" class="form-control" [(ngModel)]="serverName" /> -->
+    <input #serverNameRef type="text" class="form-control" />
+    <label> Server content</label>
+    <!-- <input type="text" class="form-control" [(ngModel)]="serverContent" /> -->
+    <input #serverContentRef type="text" class="form-control" />
+
+    <!-- <p *ngIf="serverCreated; else noServer">{{ serverName }}</p> -->
+
+    <button
+      (click)="onCreateServer(serverNameRef)"
+      class="btn btn-primary"
+      [disabled]="!allowNewServer"
+    >
+      Add server
+    </button>
+  </div>
+</div>

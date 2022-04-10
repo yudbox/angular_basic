@@ -1,0 +1,30 @@
+<div class="row">
+  <div class="col-md-5">
+    <app-recipe-list></app-recipe-list>
+  </div>
+  <div class="col-md-5">
+    <router-outlet></router-outlet>
+  </div>
+  <!-- <div class="col-md-7">
+    <app-recipe-detail
+      *ngIf="selectedRecipe; else infoText"
+      [selectedRecipe]="selectedRecipe"
+    ></app-recipe-detail>
+  </div> -->
+</div>
+
+<ng-template #infoText>
+  <p
+    *appUnless="false"
+    [appBetterHighlight]="'aquamarine'"
+    [passiveColor]="'green'"
+  >
+    Please select a recipe!
+  </p>
+  <div [ngSwitch]="switchValue">
+    <p *ngSwitchCase="1">Please select a recipe switch 1</p>
+    <p *ngSwitchCase="2">Please select a recipe switch 2</p>
+    <p *ngSwitchCase="3">Please select a recipe switch 3</p>
+    <p *ngSwitchDefault>Please select a recipe switch default</p>
+  </div>
+</ng-template>

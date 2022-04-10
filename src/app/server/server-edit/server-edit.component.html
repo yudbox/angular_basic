@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-12">
+      <h4 *ngIf="!allowEdit">Not allowed edit</h4>
+      <div *ngIf="allowEdit">
+        <p style="font-size: 22px">Some edit logic inside to update server</p>
+        <button class="btn btn-primary" (click)="onUpdateServer()">
+          Update Server
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

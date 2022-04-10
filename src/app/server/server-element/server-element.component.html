@@ -1,0 +1,18 @@
+<div class="row">
+  <div class="col-xs-12">
+    <!-- структурная директива которая запускает цикл for of и получает значение в переменную и индекс -->
+    <!-- *ngFor="let server of servers; let ind = index" -->
+    <!-- {{ ind }} -->
+    <div
+      *ngIf="element"
+      class="panel panel-default"
+      style="cursor: pointer"
+      [routerLink]="['/servers', element.id, 'edit']"
+      [queryParams]="{ allowEdit: true, search: 'eee' }"
+      fragment="loading"
+    >
+      <p>Name: {{ element.name }}</p>
+      <p>Content: {{ element.content }}</p>
+    </div>
+  </div>
+</div>

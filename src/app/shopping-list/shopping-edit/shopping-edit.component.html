@@ -1,0 +1,49 @@
+<div class="row">
+  <div class="col-xs-12">
+    <form (ngSubmit)="onSubmit(slForm)" #slForm="ngForm">
+      <div class="row">
+        <div class="col-sm-5 form-group">
+          <label for="ingredient-name">Name</label>
+          <input
+            type="text"
+            id="ingredient-name"
+            class="form-control"
+            ngModel
+            name="ingrName"
+            required />
+        </div>
+        <div class="col-sm-2 form-group">
+          <label for="ingredient-amount">Amount</label>
+          <input
+            type="number"
+            id="ingredient-amount"
+            class="form-control"
+            ngModel
+            name="ingrAmount"
+            required
+            pattern="^[1-9]+[0-9]*$" />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-12">
+          <button
+            class="btn btn-success"
+            type="submit"
+            [disabled]="!slForm.valid">
+            {{ editMode ? 'Update' : 'Add' }}
+          </button>
+          <button
+            [disabled]="!editMode"
+            class="btn btn-danger"
+            type="button"
+            (click)="onDelete()">
+            Delete
+          </button>
+          <button class="btn btn-primary" type="button" (click)="onClear()">
+            Clear
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
