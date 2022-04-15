@@ -6,6 +6,19 @@
       <span
         class="list-group-item"
         style="cursor: pointer"
+        *ngFor="
+          let ingredient of (ingredientsNGRX | async).ingredients;
+          let id = index
+        "
+        (click)="onEditItem(id)">
+        {{ ingredient.name }} ({{ ingredient.amount }})
+      </span>
+      <hr />
+      NGRX
+      <hr />
+      <span
+        class="list-group-item"
+        style="cursor: pointer"
         *ngFor="let ingredient of ingredients; let id = index"
         (click)="onEditItem(id)">
         {{ ingredient.name }} ({{ ingredient.amount }})

@@ -8,6 +8,7 @@ import { Router } from '@angular/router';
 import { BehaviorSubject, catchError, Subject, tap, throwError } from 'rxjs';
 import { AuthResponseModel } from 'src/app/models/auth-response.model';
 import { UserModel } from 'src/app/models/user.model';
+import { environment } from 'src/environments/environment';
 
 interface UserInterface {
   email: string;
@@ -20,7 +21,7 @@ interface UserInterface {
 export class AuthService {
   loggedIn = false;
   // получено из настроек firebase проекта
-  firebaseAPIKey = 'AIzaSyDyBuhTXp2eB0wW0MFaeTUDSjRqS8PtSS0';
+  firebaseAPIKey = environment.firebaseAPIKey;
   // взят из API firebase service
   // https://firebase.google.com/docs/reference/rest/auth#section-create-email-password
   signupUrl = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${this.firebaseAPIKey}`;

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { StoreModule } from '@ngrx/store';
 
 import { AppComponent } from 'src/app/app.component';
 import { ServerComponent } from 'src/app/server/server.component';
@@ -35,9 +36,10 @@ import { FetchRequestComponent } from 'src/app/fetch-request/fetch-request.compo
 import { AuthInterceptor } from 'src/app/interseptors/auth.interceptors';
 import { LoggingInterceptor } from 'src/app/interseptors/logging.interseptor';
 import { PagesComponent } from './pages/pages.component';
+import { SharedModule } from 'src/app/shared/shared.module';
+import { shoppingListReducer } from 'src/app/shopping-list/store/shopping-list.reducer';
 import { RecipesModule } from 'src/app/recipes/recipes.module';
 import { ShoppingListModule } from 'src/app/shopping-list/shopping-list.module';
-import { SharedModule } from 'src/app/shared/shared.module';
 import { AuthModule } from 'src/app/auth/auth.module';
 // import { DropdownDirective } from 'src/app/shared/directives/dropdown.directive';
 // import { LoadingSpinnersComponent } from './shared/loading-spinners/loading-spinners/loading-spinners.component';
@@ -83,6 +85,10 @@ import { AuthModule } from 'src/app/auth/auth.module';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    StoreModule.forRoot({ sl: shoppingListReducer }),
+    /* если модуль добавлен в Lazy loading его не нужно добавлять в 
+    app.module
+        */
     // AuthModule,
     // RecipesModule,
     // ShoppingListModule,

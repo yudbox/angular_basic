@@ -1,15 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Observable, Subscription } from 'rxjs';
 import { IngredientsModel } from 'src/app/shared/ingredient.model';
 import { ShoppingListService } from 'src/app/shared/services/shopping-list.service';
 import { LoggingService } from '../shared/services/logging.service';
-
+import * as fromShoppingList from 'src/app/shopping-list/store/shopping-list.reducer';
 @Component({
   selector: 'app-shopping-list',
   templateUrl: './shopping-list.component.html',
   styleUrls: ['./shopping-list.component.css'],
 })
 export class ShoppingListComponent implements OnInit, OnDestroy {
+  ingredientsNGRX: Observable<{ ingredients: IngredientsModel[] }>;
   ingredients: IngredientsModel[];
   // ingredients: IngredientsModel[] = [
   //   new IngredientsModel('flour', 100),
@@ -21,10 +23,13 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
 
   constructor(
     private slService: ShoppingListService,
-    private loggingService: LoggingService
+    private loggingService: LoggingService,
+    private store: Store<fromShoppingList.AppState>
   ) {}
 
   ngOnInit(): void {
+    this.ingredientsNGRX = this.store.select('sl');
+
     this.ingredients = this.slService.getIngredients();
     // 2й подход синхронизации в сервисе. когда создается observable и тот кто на него подписан
     // всегда получает новый список ингридеентов и перезаписывает его в компоненте

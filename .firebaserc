@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "angular-lessons": "ng-angular-lesson",
+    "default": "ng-angular-lesson"
+  },
+  "targets": {}
+}
