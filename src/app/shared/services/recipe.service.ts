@@ -10,7 +10,7 @@ export class RecipeService {
 
   private recipes: RecipeModel[] = [];
 
-  constructor(private slService: ShoppingListService) {}
+  // constructor(private slService: ShoppingListService) {}
 
   getRecipes() {
     //для того чтоб возвращать не ссылку на наш основной массив а на его копию
@@ -24,7 +24,7 @@ export class RecipeService {
   }
 
   addIngredientsToShoppingList(ingredients: IngredientsModel[]) {
-    this.slService.addIngredients(ingredients);
+    // this.slService.addIngredients(ingredients);
   }
 
   getRecipeById(id: string) {

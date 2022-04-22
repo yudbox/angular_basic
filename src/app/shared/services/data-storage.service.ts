@@ -1,9 +1,13 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { exhaustMap, map, take, tap } from 'rxjs';
+import { exhaustMap, map, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+
 import { RecipeModel } from 'src/app/recipes/recepies.model';
 import { RecipeService } from 'src/app/shared/services/recipe.service';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { AppState } from 'src/app/store/app.reducer';
+import * as RecipesActions from 'src/app/recipes/store/recipe.actions';
 
 @Injectable({ providedIn: 'root' })
 export class DataStorageService {
@@ -12,7 +16,8 @@ export class DataStorageService {
   constructor(
     private httpService: HttpClient,
     private resipeService: RecipeService,
-    private authService: AuthService
+    private authService: AuthService,
+    private store: Store<AppState>
   ) {}
 
   storeRecipes() {
@@ -40,8 +45,9 @@ export class DataStorageService {
       }),
       tap((recipes) => {
         // tap оператор позволяет делать любой дополнительный код не меняя даты ответа
-        this.resipeService.setRecipes(recipes);
-        console.log('1111 recipes', recipes);
+        this.store.dispatch(new RecipesActions.SetRecipes(recipes));
+        // this.resipeService.setRecipes(recipes);
+        // console.log('1111 recipes', recipes);
       })
     );
   }

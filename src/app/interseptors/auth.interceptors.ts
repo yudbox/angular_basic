@@ -7,8 +7,11 @@ import {
   HttpRequest,
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { exhaustMap, Observable, take, tap } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { exhaustMap, map, Observable, take, tap } from 'rxjs';
+
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { AppState } from 'src/app/store/app.reducer';
 6;
 /*
  *    {
@@ -23,7 +26,10 @@ import { AuthService } from 'src/app/shared/services/auth.service';
  */
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private store: Store<AppState>
+  ) {}
   intercept(
     req: HttpRequest<any>,
     next: HttpHandler
@@ -36,8 +42,10 @@ export class AuthInterceptor implements HttpInterceptor {
     // может трансформировать ajax запрос на сервер и также добавлять дополнительные заголовки в headers
     // return next.handle(midifiedRequest);
 
-    return this.authService.currentUser.pipe(
+    // return this.authService.currentUser.pipe(
+    return this.store.select('auth').pipe(
       take(1),
+      map((authState) => authState.user),
       exhaustMap((user) => {
         if (!user) {
           return next.handle(req);

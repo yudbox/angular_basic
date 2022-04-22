@@ -35,8 +35,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     );
 
     // pipe это инструмент который позволяет создать поток между data внутри Observable и результатом для observer
-    // в нем используютсяоператоры map, filter которые позволяют преобрасовывать и фильтровать данные
-    // которые назодятсяв Observable
+    // в нем используются операторы map, filter которые позволяют преобразовывать и фильтровать данные
+    // которые находятся в Observable
     this.onserverSubscription = customIntervalObserver
       .pipe(
         filter((data: number) => {

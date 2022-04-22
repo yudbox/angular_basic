@@ -3,6 +3,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { AppComponent } from 'src/app/app.component';
 import { ServerComponent } from 'src/app/server/server.component';
@@ -35,12 +36,19 @@ import { FilteredPipe, ShortenStringPipe } from 'src/app/shared/pipes';
 import { FetchRequestComponent } from 'src/app/fetch-request/fetch-request.component';
 import { AuthInterceptor } from 'src/app/interseptors/auth.interceptors';
 import { LoggingInterceptor } from 'src/app/interseptors/logging.interseptor';
-import { PagesComponent } from './pages/pages.component';
+import { PagesComponent } from 'src/app/pages/pages.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { shoppingListReducer } from 'src/app/shopping-list/store/shopping-list.reducer';
-import { RecipesModule } from 'src/app/recipes/recipes.module';
-import { ShoppingListModule } from 'src/app/shopping-list/shopping-list.module';
-import { AuthModule } from 'src/app/auth/auth.module';
+import { authReducer } from 'src/app/auth/store/auth.reducer';
+import { AppReducer } from 'src/app/store/app.reducer';
+import { EffectsModule, EffectsRootModule } from '@ngrx/effects';
+import { AuthEffects } from 'src/app/auth/store/auth.effects';
+import { environment } from 'src/environments/environment';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { RecipesEffects } from 'src/app/recipes/store/recipe.effects';
+// import { RecipesModule } from 'src/app/recipes/recipes.module';
+// import { ShoppingListModule } from 'src/app/shopping-list/shopping-list.module';
+// import { AuthModule } from 'src/app/auth/auth.module';
 // import { DropdownDirective } from 'src/app/shared/directives/dropdown.directive';
 // import { LoadingSpinnersComponent } from './shared/loading-spinners/loading-spinners/loading-spinners.component';
 // import { AlertComponent } from 'src/app/shared/alerts/alert.component';
@@ -85,7 +93,10 @@ import { AuthModule } from 'src/app/auth/auth.module';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    StoreModule.forRoot({ sl: shoppingListReducer }),
+    StoreModule.forRoot(AppReducer),
+    EffectsModule.forRoot([AuthEffects, RecipesEffects]),
+    StoreDevtoolsModule.instrument({ logOnly: environment.production }),
+    StoreRouterConnectingModule.forRoot(),
     /* если модуль добавлен в Lazy loading его не нужно добавлять в 
     app.module
         */

@@ -5,17 +5,15 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { BehaviorSubject, catchError, Subject, tap, throwError } from 'rxjs';
+
 import { AuthResponseModel } from 'src/app/models/auth-response.model';
 import { UserModel } from 'src/app/models/user.model';
+import { AppState } from 'src/app/store/app.reducer';
 import { environment } from 'src/environments/environment';
-
-interface UserInterface {
-  email: string;
-  id: string;
-  _token: string;
-  _tokenExparationDate: string;
-}
+import * as AuthActions from 'src/app/auth/store/auth.actions';
+import { UserInterface } from 'src/app/shared/interfaces/user.interface';
 
 @Injectable()
 export class AuthService {
@@ -32,9 +30,13 @@ export class AuthService {
   // в котором хранится значения и оно может быть отдано любому новому подписчику который подписался после next()
   // в обычном Subject все значения next() до подписки теряются
 
-  currentUser = new BehaviorSubject<UserModel>(null);
+  // currentUser = new BehaviorSubject<UserModel>(null);
   private tokenExparationTimer: any;
-  constructor(private router: Router, private httpService: HttpClient) {}
+  constructor(
+    private router: Router,
+    private httpService: HttpClient,
+    private store: Store<AppState>
+  ) {}
 
   isAuthentificated() {
     const promise = new Promise((resolve, reject) => {
@@ -45,151 +47,178 @@ export class AuthService {
     return promise;
   }
 
-  signup(email: string, password: string) {
-    return this.httpService
-      .post<AuthResponseModel>(
-        this.signupUrl,
-        {
-          email,
-          password,
-          returnSecureToken: true,
-        },
-        {
-          headers: new HttpHeaders({
-            'Content-Type': 'application/json',
-          }),
-        }
-      )
-      .pipe(
-        catchError(this.errorHandler),
-        tap((resData) => {
-          // tap это оператор который вслинивается перед subscribe но не меняет возвращаемую дату
-          // но позволяет производить манипуляции с ней
-          this.authificationHandler(
-            resData.email,
-            resData.localId,
-            resData.idToken,
-            resData.expiresIn
-          );
-        })
-      );
-  }
+  // signup(email: string, password: string) {
+  //   return this.httpService
+  //     .post<AuthResponseModel>(
+  //       this.signupUrl,
+  //       {
+  //         email,
+  //         password,
+  //         returnSecureToken: true,
+  //       },
+  //       {
+  //         headers: new HttpHeaders({
+  //           'Content-Type': 'application/json',
+  //         }),
+  //       }
+  //     )
+  //     .pipe(
+  //       catchError(this.errorHandler),
+  //       tap((resData) => {
+  //         // tap это оператор который вслинивается перед subscribe но не меняет возвращаемую дату
+  //         // но позволяет производить манипуляции с ней
+  //         this.authificationHandler(
+  //           resData.email,
+  //           resData.localId,
+  //           resData.idToken,
+  //           resData.expiresIn
+  //         );
+  //       })
+  //     );
+  // }
 
-  login(email: string, password: string) {
-    // -----> this, old code nessasery for old logic
-    this.loggedIn = true;
-    // -----> this, old code nessasery for old logic
+  // login(email: string, password: string) {
+  //   // -----> this, old code nessasery for old logic
+  //   this.loggedIn = true;
+  //   // -----> this, old code nessasery for old logic
 
-    return this.httpService
-      .post<AuthResponseModel>(this.signInUrl, {
-        email,
-        password,
-        returnSecureToken: true,
-      })
-      .pipe(
-        catchError(this.errorHandler),
-        tap((resData) => {
-          // tap это оператор который вслинивается перед subscribe но не меняет возвращаемую дату
-          // но позволяет производить манипуляции с ней
-          this.authificationHandler(
-            resData.email,
-            resData.localId,
-            resData.idToken,
-            resData.expiresIn
-          );
-        })
-      );
-  }
+  //   return this.httpService
+  //     .post<AuthResponseModel>(this.signInUrl, {
+  //       email,
+  //       password,
+  //       returnSecureToken: true,
+  //     })
+  //     .pipe(
+  //       catchError(this.errorHandler),
+  //       tap((resData) => {
+  //         // tap это оператор который вслинивается перед subscribe но не меняет возвращаемую дату
+  //         // но позволяет производить манипуляции с ней
+  //         this.authificationHandler(
+  //           resData.email,
+  //           resData.localId,
+  //           resData.idToken,
+  //           resData.expiresIn
+  //         );
+  //       })
+  //     );
+  // }
 
-  autoLogin() {
-    /* изымаем данные из локального хранилища
-     * если данные есть значит пользователь уже логинился
-     * усли нет значит autoLogin не сработает при загрузке app.component
-     */
-    const user: UserInterface = JSON.parse(localStorage.getItem('userData'));
+  // autoLogin() {
+  //   /* изымаем данные из локального хранилища
+  //    * если данные есть значит пользователь уже логинился
+  //    * усли нет значит autoLogin не сработает при загрузке app.component
+  //    */
+  //   const user: UserInterface = JSON.parse(localStorage.getItem('userData'));
 
-    if (!user) {
-      return;
-    }
-    // создаем класс залогиненого ранее юзера
-    const loadedUser = new UserModel(
-      user.email,
-      user.id,
-      user._token,
-      new Date(user._tokenExparationDate)
-    );
-    // в модели есть проверка token, если token expired вернется null
-    // залогинивания не произойдет
-    if (loadedUser.token) {
-      this.currentUser.next(loadedUser);
+  //   if (!user) {
+  //     return;
+  //   }
+  //   // создаем класс залогиненого ранее юзера
+  //   const loadedUser = new UserModel(
+  //     user.email,
+  //     user.id,
+  //     user._token,
+  //     new Date(user._tokenExparationDate)
+  //   );
+  //   // в модели есть проверка token, если token expired вернется null
+  //   // залогинивания не произойдет
+  //   if (loadedUser.token) {
+  //     this.store.dispatch(
+  //       new AuthActions.AuthentificateSuccess({
+  //         email: loadedUser.email,
+  //         userId: loadedUser.id,
+  //         token: loadedUser.token,
+  //         exparationDate: new Date(user._tokenExparationDate),
+  //       })
+  //     );
+  //     // this.currentUser.next(loadedUser);
 
-      // время на сессию вычисляется из разницы _tokenExparationDate полученного при первой логинизации и
-      // текущего времени и запускается autoLogout который сам вылогинит пользователя из расчитанного времени
-      const exparationDuration =
-        new Date(user._tokenExparationDate).getTime() - new Date().getTime();
-      this.autoLogout(exparationDuration);
-    }
-  }
+  //     // время на сессию вычисляется из разницы _tokenExparationDate полученного при первой логинизации и
+  //     // текущего времени и запускается autoLogout который сам вылогинит пользователя из расчитанного времени
+  //     const exparationDuration =
+  //       new Date(user._tokenExparationDate).getTime() - new Date().getTime();
+  //     this.autoLogout(exparationDuration);
+  //   }
+  // }
 
-  logout() {
-    // удаляем все данные о текущем юзере из сервиса
-    this.currentUser.next(null);
-    this.loggedIn = false;
-    this.router.navigate(['/auth']);
-    // очищаем локальное хранилище чтоб не было autologin
-    localStorage.removeItem('userData');
-    // очищаем setTimeout для автовыдогинивания чтоб избежать утечек памяти
-    if (this.tokenExparationTimer) {
-      clearTimeout(this.tokenExparationTimer);
-    }
-    // очищаем id таймаута для сброса setTimeout
-    this.tokenExparationTimer = null;
-  }
+  // logout() {
+  //   // удаляем все данные о текущем юзере из сервиса
+  //   this.store.dispatch(new AuthActions.Logout());
+  //   // this.currentUser.next(null);
+  //   this.loggedIn = false;
+  //   this.router.navigate(['/auth']);
+  //   // очищаем локальное хранилище чтоб не было autologin
+  //   localStorage.removeItem('userData');
+  //   // очищаем setTimeout для автовыдогинивания чтоб избежать утечек памяти
+  //   if (this.tokenExparationTimer) {
+  //     clearTimeout(this.tokenExparationTimer);
+  //   }
+  //   // очищаем id таймаута для сброса setTimeout
+  //   this.tokenExparationTimer = null;
+  // }
 
   autoLogout(exparationData: number) {
     // эта функция используется для самостоятельного вылогинивания через время истечения токена
     // вызывается во время login or autologin
     this.tokenExparationTimer = setTimeout(() => {
-      this.logout();
+      // this.logout();
+      this.store.dispatch(new AuthActions.Logout());
     }, exparationData);
   }
 
-  private authificationHandler(
-    email: string,
-    localId: string,
-    idToken: string,
-    expiresIn: string
-  ) {
-    // tap это оператор который вслинивается перед subscribe но не меняет возвращаемую дату
-    // но позволяет производить манипуляции с ней
-    // exparationDate генерируется самостоятояльно и она будет равна текущему timestamp +  expiresIn(3600с) * 1000
-    // чтоб перевести в мс и прибавить к timestamp
-    const exparationDate = new Date(
-      new Date().getTime() + Number(expiresIn) * 1000
-    );
-    const user = new UserModel(email, localId, idToken, exparationDate);
-    // currentUser это евент эмитр или Subject на который можно подписаться и всегда получать актуального залогиненого юзера
-    this.currentUser.next(user);
-    localStorage.setItem('userData', JSON.stringify(user));
-    this.autoLogout(Number(expiresIn) * 1000);
-  }
-
-  private errorHandler(errorRes: HttpErrorResponse) {
-    let errorMessage = '';
-
-    switch (errorRes?.error?.error?.message) {
-      case 'EMAIL_EXISTS':
-        errorMessage = 'This email already exists';
-        break;
-      case 'INVALID_PASSWORD':
-        errorMessage = 'You entered invalid password';
-        break;
-      case 'EMAIL_NOT_FOUND':
-        errorMessage = 'User does not exist';
-        break;
-      default:
-        errorMessage = ' An unknown error occured!';
+  clearLogoutTimer() {
+    if (this.tokenExparationTimer) {
+      clearInterval(this.tokenExparationTimer);
+      this.tokenExparationTimer = null;
     }
-    return throwError(() => new Error(errorMessage));
   }
+
+  // private authificationHandler(
+  //   email: string,
+  //   localId: string,
+  //   idToken: string,
+  //   expiresIn: string
+  // ) {
+  //   // tap это оператор который вслинивается перед subscribe но не меняет возвращаемую дату
+  //   // но позволяет производить манипуляции с ней
+  //   // exparationDate генерируется самостоятояльно и она будет равна текущему timestamp +  expiresIn(3600с) * 1000
+  //   // чтоб перевести в мс и прибавить к timestamp
+  //   const exparationDate = new Date(
+  //     new Date().getTime() + Number(expiresIn) * 1000
+  //   );
+
+  //   this.store.dispatch(
+  //     new AuthActions.AuthentificateSuccess({
+  //       email: email,
+  //       userId: localId,
+  //       token: idToken,
+  //       exparationDate,
+  //     })
+  //   );
+
+  //   const user = new UserModel(email, localId, idToken, exparationDate);
+  //   // currentUser это евент эмитр или Subject на который можно подписаться и всегда получать актуального залогиненого юзера
+  //   // this.currentUser.next(user);
+  //   localStorage.setItem('userData', JSON.stringify(user));
+  //   this.autoLogout(Number(expiresIn) * 1000);
+  // }
+
+  // private errorHandler(errorRes: HttpErrorResponse) {
+  //   let errorMessage = '';
+
+  //   switch (errorRes?.error?.error?.message) {
+  //     case 'EMAIL_EXISTS':
+  //       errorMessage = 'This email already exists';
+  //       break;
+  //     case 'INVALID_PASSWORD':
+  //       errorMessage = 'You entered invalid password';
+  //       break;
+  //     case 'EMAIL_NOT_FOUND':
+  //       errorMessage = 'User does not exist';
+  //       break;
+  //     default:
+  //       errorMessage = ' An unknown error occured!';
+  //   }
+  //   return throwError(() => new Error(errorMessage));
+  // }
 }
