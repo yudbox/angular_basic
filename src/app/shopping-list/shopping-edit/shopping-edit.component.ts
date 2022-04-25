@@ -63,8 +63,6 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
     // );
   }
   onSubmit(form: NgForm) {
-    console.log('form', form);
-
     const ingrName = form.value.ingrName;
     const ingrAmount = form.value.ingrAmount;
 

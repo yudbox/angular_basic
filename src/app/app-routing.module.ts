@@ -41,6 +41,12 @@ const appRoutes: Routes = [
         (m) => m.ShoppingListModule
       ),
   },
+  {
+    path: 'animate',
+    // таким образом мы указываем Ангуляр что загрузка модуля должна производиться с момощью Lazy loading
+    loadChildren: () =>
+      import('src/app/animate/animate.module').then((m) => m.AnimateModule),
+  },
   { path: 'form', component: FormComponent },
   { path: 'formsecond', component: Form2Component },
   { path: 'fetch', component: FetchRequestComponent },

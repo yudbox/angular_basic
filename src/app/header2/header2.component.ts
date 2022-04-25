@@ -15,6 +15,7 @@ import * as RecipesActions from 'src/app/recipes/store/recipe.actions';
 })
 export class Header2Component implements OnInit, OnDestroy {
   isAuthentificated = false;
+  isDevMode = false;
   private authSubscription: Subscription;
 
   constructor(
@@ -26,7 +27,7 @@ export class Header2Component implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.authSubscription = this.store.select('auth').subscribe((userState) => {
       this.isAuthentificated = !!userState?.user;
-      console.log('user', userState);
+      this.isDevMode = userState.isDevMode;
     });
   }
 

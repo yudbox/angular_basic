@@ -28,7 +28,7 @@ export class LoggingInterceptor implements HttpInterceptor {
           if (event.type === HttpEventType.Response) {
             // event это параметры ответа такие как type, text, status и т.д.
             // HttpEventType это enum в котором зашифрованы коды type
-            console.log('Response arived, data', event.body);
+            // console.log('Response arived, data', event.body);
             //   здесь можно вызвать snackbar что запрос прошел успешно
           }
         },

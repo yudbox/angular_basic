@@ -57,7 +57,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     if (!this.authForm.value) {
       return;
     }
-    console.log(this.authForm.value);
+    // console.log(this.authForm.value);
 
     const email = this.authForm.value.email;
     const password = this.authForm.value.password;

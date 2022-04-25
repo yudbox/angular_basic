@@ -12,7 +12,7 @@ import { exhaustMap, map, Observable, take, tap } from 'rxjs';
 
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { AppState } from 'src/app/store/app.reducer';
-6;
+
 /*
  *    {
       provide: HTTP_INTERCEPTORS,
@@ -34,7 +34,7 @@ export class AuthInterceptor implements HttpInterceptor {
     req: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    console.log('11111 intercept url', req.url);
+    // console.log('11111 intercept url', req.url);
 
     // const midifiedRequest = req.clone({
     //   headers: req.headers.append('Auth', 'bearer 123456'),

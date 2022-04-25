@@ -36,7 +36,6 @@ import { FilteredPipe, ShortenStringPipe } from 'src/app/shared/pipes';
 import { FetchRequestComponent } from 'src/app/fetch-request/fetch-request.component';
 import { AuthInterceptor } from 'src/app/interseptors/auth.interceptors';
 import { LoggingInterceptor } from 'src/app/interseptors/logging.interseptor';
-import { PagesComponent } from 'src/app/pages/pages.component';
 import { SharedModule } from 'src/app/shared/shared.module';
 import { shoppingListReducer } from 'src/app/shopping-list/store/shopping-list.reducer';
 import { authReducer } from 'src/app/auth/store/auth.reducer';
@@ -53,6 +52,7 @@ import { RecipesEffects } from 'src/app/recipes/store/recipe.effects';
 // import { LoadingSpinnersComponent } from './shared/loading-spinners/loading-spinners/loading-spinners.component';
 // import { AlertComponent } from 'src/app/shared/alerts/alert.component';
 // import { Placeholderderictive } from 'src/app/shared/directives/placeholder.derictive';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   // здесь регистрируються все компоненты и директивы
@@ -84,12 +84,12 @@ import { RecipesEffects } from 'src/app/recipes/store/recipe.effects';
     ShortenStringPipe,
     FilteredPipe,
     FetchRequestComponent,
-    PagesComponent,
   ],
   // роутинг не работает как надо если RecipesModule компонента с чайлд роутингом
   //  находиться ниже чем AppRoutingModule где есть роут not-found
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,

@@ -17,6 +17,7 @@ export class AuthentificateSuccess implements Action {
       token: string;
       exparationDate: Date;
       redirect: boolean;
+      isDevMode: boolean;
     }
   ) {}
 }

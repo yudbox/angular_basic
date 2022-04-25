@@ -20,7 +20,6 @@ export class ServerResolverService implements Resolve<ServersModel> {
     const currentServer = this.serversService
       .getServers()
       .find((s) => s.id == id);
-    console.log('33333 currentServer', currentServer);
 
     return currentServer;
   }

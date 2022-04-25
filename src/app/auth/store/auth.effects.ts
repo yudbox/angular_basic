@@ -167,12 +167,17 @@ export class AuthEffects {
 
           this.authService.autoLogout(exparationDuration);
 
+          const devRegExp = /^dev*/gm;
+
+          const isDevMode = devRegExp.test(loadedUser.email);
+
           return new AuthActions.AuthentificateSuccess({
             email: loadedUser.email,
             userId: loadedUser.id,
             token: loadedUser.token,
             exparationDate: new Date(user._tokenExparationDate),
             redirect: false,
+            isDevMode,
           });
 
           // this.currentUser.next(loadedUser);
@@ -192,6 +197,10 @@ export class AuthEffects {
       responseData.idToken,
       exparationDate
     );
+    const devRegExp = /^dev*/gm;
+
+    const isDevMode = devRegExp.test(responseData.email);
+
     localStorage.setItem('userData', JSON.stringify(user));
     return new AuthActions.AuthentificateSuccess({
       email: responseData.email,
@@ -199,6 +208,7 @@ export class AuthEffects {
       token: responseData.idToken,
       exparationDate,
       redirect: true,
+      isDevMode,
     });
   }
 

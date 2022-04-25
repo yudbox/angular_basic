@@ -1,46 +1,92 @@
-<nav class="navbar navbar-default">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <div class="navbar-header">
       <a class="navbar-brand">Recipe Book</a>
     </div>
-    <div class="collapse navbar-collapse">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="nav navbar-nav">
-        <li *ngIf="isAuthentificated" routerLinkActive="active">
-          <a routerLink="/recipes">Recepies</a>
+        <li
+          *ngIf="isAuthentificated"
+          routerLinkActive="active"
+          class="nav-item">
+          <a class="nav-link" routerLink="/recipes">Recepies</a>
         </li>
-        <li routerLinkActive="active">
-          <a routerLink="/shopping-list">Shopping List</a>
+        <li routerLinkActive="active" class="nav-item">
+          <a class="nav-link" routerLink="/shopping-list">Shopping List</a>
         </li>
-        <li *ngIf="!isAuthentificated" routerLinkActive="active">
-          <a routerLink="/auth">Auth</a>
+        <li
+          *ngIf="!isAuthentificated"
+          routerLinkActive="active"
+          class="nav-item">
+          <a class="nav-link" routerLink="/auth">Auth</a>
         </li>
-        <li *ngIf="isAuthentificated" routerLinkActive="active">
-          <a routerLink="/fetch">Fetch request</a>
+        <li
+          *ngIf="isAuthentificated && isDevMode"
+          routerLinkActive="active"
+          class="nav-item">
+          <a class="nav-link" routerLink="/fetch">Fetch request</a>
         </li>
-        <li *ngIf="isAuthentificated" routerLinkActive="active">
-          <a routerLink="/pipes">Pipes transforming</a>
+        <li
+          *ngIf="isAuthentificated && isDevMode"
+          routerLinkActive="active"
+          class="nav-item">
+          <a class="nav-link" routerLink="/pipes">Pipes transforming</a>
         </li>
-        <li *ngIf="isAuthentificated" routerLinkActive="active">
-          <a routerLink="/form">Form</a>
+        <li
+          *ngIf="isAuthentificated && isDevMode"
+          routerLinkActive="active"
+          class="nav-item">
+          <a class="nav-link" routerLink="/form">Form</a>
         </li>
-        <li *ngIf="isAuthentificated" routerLinkActive="active">
-          <a routerLink="/formsecond">Form 2</a>
+        <li
+          *ngIf="isAuthentificated && isDevMode"
+          routerLinkActive="active"
+          class="nav-item">
+          <a class="nav-link" routerLink="/formsecond">Form 2</a>
         </li>
-        <li *ngIf="isAuthentificated" routerLinkActive="active">
-          <a (click)="onLogout()" style="cursor: pointer">Logout</a>
+        <li
+          *ngIf="isAuthentificated"
+          routerLinkActive="active"
+          class="nav-item">
+          <a class="nav-link" (click)="onLogout()" style="cursor: pointer"
+            >Logout</a
+          >
         </li>
-      </ul>
-      <ul *ngIf="isAuthentificated" class="nav navbar-nav navbar-right">
-        <li appDropdown class="dropdown">
-          <a class="dropdown-toggle" role="button"
-            >Manage <span class="caret"></span
-          ></a>
-          <ul class="dropdown-menu">
+        <li *ngIf="isAuthentificated" class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            id="navbarDropdownMenuLink"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Manage
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <li>
-              <a (click)="onSaveData()" style="cursor: pointer">Save data</a>
+              <a
+                class="dropdown-item"
+                (click)="onSaveData()"
+                style="cursor: pointer"
+                >Save data</a
+              >
             </li>
             <li>
-              <a (click)="onFetchData()" style="cursor: pointer">Fetch data</a>
+              <a
+                class="dropdown-item"
+                (click)="onFetchData()"
+                style="cursor: pointer"
+                >Fetch data</a
+              >
             </li>
           </ul>
         </li>

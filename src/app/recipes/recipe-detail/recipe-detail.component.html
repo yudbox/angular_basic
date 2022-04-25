@@ -14,21 +14,37 @@
 </div>
 <div class="row">
   <div class="col-xs-12">
-    <div appDropdown class="btn-group">
-      <button type="button" class="btn btn-primary dropdown-toggle">
-        Manage recipe <span class="caret"></span>
+    <div class="dropdown btn-group">
+      <button
+        type="button"
+        class="btn btn-primary dropdown-toggle"
+        id="dropdownMenuButton1"
+        data-bs-toggle="dropdown"
+        aria-expanded="false">
+        Manage recipe
       </button>
-      <ul class="dropdown-menu">
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
         <li>
-          <a (click)="onAddToShoppingList()" style="cursor: pointer"
+          <a
+            class="dropdown-item"
+            (click)="onAddToShoppingList()"
+            style="cursor: pointer"
             >To shopping list</a
           >
         </li>
         <li>
-          <a (click)="onEditRecipe()" style="cursor: pointer">Edit Recipe</a>
+          <a
+            class="dropdown-item"
+            (click)="onEditRecipe()"
+            style="cursor: pointer"
+            >Edit Recipe</a
+          >
         </li>
         <li>
-          <a (click)="onDeleteRecipe()" style="cursor: pointer"
+          <a
+            class="dropdown-item"
+            (click)="onDeleteRecipe()"
+            style="cursor: pointer"
             >Delete Recipe</a
           >
         </li>

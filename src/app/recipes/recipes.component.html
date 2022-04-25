@@ -2,6 +2,7 @@
   <div class="col-md-5">
     <app-recipe-list></app-recipe-list>
   </div>
+  <br />
   <div class="col-md-5">
     <router-outlet></router-outlet>
   </div>
@@ -17,8 +18,7 @@
   <p
     *appUnless="false"
     [appBetterHighlight]="'aquamarine'"
-    [passiveColor]="'green'"
-  >
+    [passiveColor]="'green'">
     Please select a recipe!
   </p>
   <div [ngSwitch]="switchValue">
